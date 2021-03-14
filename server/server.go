@@ -1,4 +1,3 @@
-// Package main implements a server for Greeter service.
 package main
 
 import (
@@ -10,21 +9,19 @@ import (
 )
 
 const (
-	port = ":5001"
+	grpcPort = ":5001"
 )
 
 func main() {
-	// TODO: Add info logs
-
-	lis, err := net.Listen("tcp", port)
+	lis, err := net.Listen("tcp", grpcPort)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	s := chat.Server{}
+	server := chat.Server{}
 	grpcServer := grpc.NewServer()
 
-	chat.RegisterChatServiceServer(grpcServer, &s)
+	chat.RegisterChatServiceServer(grpcServer, &server)
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
