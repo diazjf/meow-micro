@@ -1,0 +1,8 @@
+name: meow-micro
+version: 1.0
+appVersion: 1.0
+home: https://github.com/diazjf/meow-micro
+description: Contains MicroServices which send and receive cat names. It is used in the Distributed Tracing tutorial.
+sources:
+  - https://github.com/diazjf/meow-micro
+

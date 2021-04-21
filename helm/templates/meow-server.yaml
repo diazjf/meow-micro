@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meow-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meow-server
+  template:
+    metadata:
+      labels:
+        app: meow-server
+    spec:
+      containers:
+      - name: meow-server
+        image: {{ .Values.server.image }}
+        ports:
+        - containerPort: {{ .Values.server.targetPort }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meow-server-svc
+spec:
+  ports:
+  - port: {{ .Values.server.port }}
+    targetPort: {{ .Values.server.targetPort }}
+    protocol: TCP
+    name: http
+  selector:
+    app: meow-server

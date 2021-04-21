@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meow-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meow-client
+  template:
+    metadata:
+      labels:
+        app: meow-client
+    spec:
+      containers:
+      - name: meow-client
+        image: {{ .Values.client.image }}
+        ports:
+        - containerPort: {{ .Values.client.targetPort }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meow-client-svc
+spec:
+  ports:
+  - port: {{ .Values.client.port }}
+    targetPort: {{ .Values.client.targetPort }}
+    protocol: TCP
+    name: http
+  selector:
+    app: meow-client
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meow-client-rest-svc
+spec:
+  ports:
+  - port: {{ .Values.client.rest.port }}
+    targetPort: {{ .Values.client.rest.targetPort }}
+    protocol: TCP
+    name: http
+  selector:
+    app: meow-client
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: notes-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/enable-opentracing: "true"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /meow(/|$)(.*)
+        backend:
+          serviceName: meow-client-rest-svc
+          servicePort: {{ .Values.client.port }}

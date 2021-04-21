@@ -1,0 +1,13 @@
+client:
+  image: 1.0
+  targetPort: 5001
+  port: 5001
+  rest:
+    targetPort: 5002
+    port: 80
+
+server:
+  image: 1.0
+  targetPort: 5001
+  port: 5001
+
