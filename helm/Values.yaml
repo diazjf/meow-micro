@@ -1,5 +1,5 @@
 client:
-  image: 1.0
+  image: "meow-client:1.0"
   targetPort: 5001
   port: 5001
   rest:
@@ -7,7 +7,6 @@ client:
     port: 80
 
 server:
-  image: 1.0
+  image: "meow-server:1.0"
   targetPort: 5001
   port: 5001
-

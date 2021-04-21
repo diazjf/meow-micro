@@ -44,10 +44,10 @@ spec:
   selector:
     app: meow-client
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: notes-ingress
+  name: meow-client-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/enable-opentracing: "true"
