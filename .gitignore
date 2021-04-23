@@ -14,5 +14,8 @@
 # OSX
 .DS_Store
 
+# Deployment
+/tmp
+
 # Dependency directories (remove the comment below to include it)
 # vendor/

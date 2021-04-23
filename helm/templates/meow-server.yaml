@@ -27,6 +27,30 @@ spec:
   - port: {{ .Values.server.port }}
     targetPort: {{ .Values.server.targetPort }}
     protocol: TCP
-    name: http
   selector:
     app: meow-server
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: meow-server-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /meow-server
+        pathType: Prefix
+        backend:
+          service:
+            name: meow-server-svc
+            port:
+              number: {{ .Values.server.port }}
+  {{ if .Values.server.port }}
+  tls:
+  - secretName: {{ .Values.server.secretname }}
+  {{ end }}

@@ -20,8 +20,10 @@ func main() {
 
 	server := chat.Server{}
 	grpcServer := grpc.NewServer()
+	log.Printf("Server Starting")
 
 	chat.RegisterChatServiceServer(grpcServer, &server)
+	log.Printf("Registering Server")
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/diazjf/meow-micro/chat"
 	"google.golang.org/grpc"
@@ -38,8 +39,15 @@ func main() {
 		span := tracer.StartSpan("send-meow-communication", ext.RPCServerOption(spanCtx))
 		defer span.Finish()
 
+		// Get env variable for GRPC Server Address
+		sAddr := os.Getenv("GRPC_SERVER_ADDRESS")
+		if sAddr == "" {
+			sAddr = GRPCAddress
+		}
+		log.Printf("GRPC Server set to %v", sAddr)
+
 		// Set up a connection to the GRPC server
-		conn, err := grpc.Dial(GRPCAddress, grpc.WithInsecure(), grpc.WithBlock())
+		conn, err := grpc.Dial(sAddr, grpc.WithInsecure(), grpc.WithBlock())
 		if err != nil {
 			log.Fatalf("did not connect: %v", err)
 		}
@@ -71,6 +79,6 @@ func main() {
 		}
 
 	})
-
+	log.Printf("Client Started")
 	log.Fatal(http.ListenAndServe(RESTPort, nil))
 }

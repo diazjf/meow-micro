@@ -15,6 +15,9 @@ spec:
       containers:
       - name: meow-client
         image: {{ .Values.client.image }}
+        env:
+          - name: GRPC_SERVER_ADDRESS
+            value: {{ .Values.server.path }}
         ports:
         - containerPort: {{ .Values.client.targetPort }}
 ---
@@ -27,7 +30,6 @@ spec:
   - port: {{ .Values.client.port }}
     targetPort: {{ .Values.client.targetPort }}
     protocol: TCP
-    name: http
   selector:
     app: meow-client
 ---
@@ -40,7 +42,6 @@ spec:
   - port: {{ .Values.client.rest.port }}
     targetPort: {{ .Values.client.rest.targetPort }}
     protocol: TCP
-    name: http
   selector:
     app: meow-client
 ---
@@ -49,13 +50,16 @@ kind: Ingress
 metadata:
   name: meow-client-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/enable-opentracing: "true"
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - http:
       paths:
-      - path: /meow(/|$)(.*)
+      - path: /meow
+        pathType: Prefix
         backend:
-          serviceName: meow-client-rest-svc
-          servicePort: {{ .Values.client.port }}
+          service:
+            name: meow-client-rest-svc
+            port:
+              number: {{ .Values.client.rest.port }}
