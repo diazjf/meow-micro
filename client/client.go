@@ -45,13 +45,14 @@ func main() {
 			sAddr = GRPCAddress
 		}
 		log.Printf("GRPC Server set to %v", sAddr)
-
+		log.Printf("GRPC Connection Started")
 		// Set up a connection to the GRPC server
 		conn, err := grpc.Dial(sAddr, grpc.WithInsecure(), grpc.WithBlock())
 		if err != nil {
 			log.Fatalf("did not connect: %v", err)
 		}
 		defer conn.Close()
+		log.Printf("GRPC Connection Established")
 
 		// create a from the proto
 		c := chat.NewChatServiceClient(conn)

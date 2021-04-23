@@ -6,6 +6,7 @@ import (
 
 	"github.com/diazjf/meow-micro/chat"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 const (
@@ -22,6 +23,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 	log.Printf("Server Starting")
 
+	reflection.Register(grpcServer)
 	chat.RegisterChatServiceServer(grpcServer, &server)
 	log.Printf("Registering Server")
 

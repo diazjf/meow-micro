@@ -1,7 +1,6 @@
 client:
   image: "meow-client:1.0"
-  targetPort: 5001
-  port: 5001
+  containerPort: 5001
   rest:
     targetPort: 5002
     port: 5002
@@ -10,5 +9,4 @@ server:
   image: "meow-server:1.0"
   targetPort: 5001
   port: 5001
-  path: localhost:443/meow-server
-  secretname: grpc-secret
+  path: meow-server-svc:5001

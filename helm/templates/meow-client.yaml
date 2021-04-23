@@ -19,19 +19,7 @@ spec:
           - name: GRPC_SERVER_ADDRESS
             value: {{ .Values.server.path }}
         ports:
-        - containerPort: {{ .Values.client.targetPort }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: meow-client-svc
-spec:
-  ports:
-  - port: {{ .Values.client.port }}
-    targetPort: {{ .Values.client.targetPort }}
-    protocol: TCP
-  selector:
-    app: meow-client
+        - containerPort: {{ .Values.client.containerPort }}
 ---
 apiVersion: v1
 kind: Service
