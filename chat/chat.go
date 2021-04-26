@@ -2,6 +2,7 @@ package chat
 
 import (
 	"log"
+	"os"
 
 	"github.com/diazjf/meow-micro/tracing"
 	"github.com/opentracing/opentracing-go"
@@ -14,7 +15,8 @@ type Server struct {
 
 func (s *Server) SayHello(ctx context.Context, in *Message) (*Message, error) {
 	// Add Tracer for SayHello
-	tracer, closer := tracing.Init("Say Hello")
+	os.Setenv("JAEGER_SERVICE_NAME", "say-hello")
+	tracer, closer := tracing.Init()
 	defer closer.Close()
 
 	//Span until the end of this function

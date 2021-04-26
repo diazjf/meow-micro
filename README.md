@@ -26,28 +26,41 @@ In order to run locally simply perform the following:
 
 ## Deploying to Kubernetes
 
-I have included deployment scripts for deploying to Docker Desktop Kubernetes.
+I have included deployment scripts for deploying to Docker-Desktop Kubernetes.
+There are some pre-requisites required before running the below:
 
-1. 
+- Docker-Desktop
+- Helm v3
+
+1. Clean environment
 ```
 $ make clean
 ```
 
-2. 
+2. Build Docker Images
 ```
 $ make build
 ```
 
-3. 
+3. Install via Helm Chart
 ```
 $ make install
 ```
 
 ## Troubleshooting
 
-1. Verify you can access the GRPC Service
+1. Exec into the meow-client pod
+
+2. install grpcurl
 ```
-grpcurl -d '{"body": "Meow-Mixer"}' -insecure localhost:443 chat.ChatService/SayHello
+go get github.com/fullstorydev/grpcurl/...
+go install github.com/fullstorydev/grpcurl/cmd/grpcurl
+```
+
+3. Verify you can access the GRPC Service
+
+```
+grpcurl -d '{"body": "Meow-Mixer"}' -plaintext meow-server-svc:5001 chat.ChatService/SayHello
 
 {
   "body": "Meow-Mixer"

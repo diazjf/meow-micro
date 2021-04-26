@@ -18,6 +18,14 @@ spec:
         env:
           - name: GRPC_SERVER_ADDRESS
             value: {{ .Values.server.path }}
+          - name: JAEGER_AGENT_HOST
+            value: "jaeger-agent.default.svc.cluster.local"
+          - name: JAEGER_REPORTER_LOG_SPANS
+            value: "true"
+          - name: JAEGER_SAMPLER_TYPE
+            value: "const"
+          - name: JAEGER_SAMPLER_PARAM
+            value: "1"
         ports:
         - containerPort: {{ .Values.client.containerPort }}
 ---
@@ -38,7 +46,7 @@ kind: Ingress
 metadata:
   name: meow-client-ingress
   annotations:
-    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/enable-opentracing: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:

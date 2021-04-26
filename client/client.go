@@ -28,7 +28,8 @@ type Cat struct {
 
 func main() {
 	// Add tracer for the HTTPHandle function
-	tracer, closer := tracing.Init("meow-communicator")
+	os.Setenv("JAEGER_SERVICE_NAME", "meow-client")
+	tracer, closer := tracing.Init()
 	defer closer.Close()
 
 	opentracing.SetGlobalTracer(tracer)

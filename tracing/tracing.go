@@ -3,27 +3,27 @@ package tracing
 import (
 	"fmt"
 	"io"
+	"log"
 
 	opentracing "github.com/opentracing/opentracing-go"
-	jaeger "github.com/uber/jaeger-client-go"
 	config "github.com/uber/jaeger-client-go/config"
 )
 
 // Init returns an instance of Jaeger Tracer that samples 100% of traces and logs all spans to stdout.
-func Init(service string) (opentracing.Tracer, io.Closer) {
-	cfg := &config.Configuration{
-		ServiceName: service,
-		Sampler: &config.SamplerConfig{
-			Type:  "const",
-			Param: 1,
-		},
-		Reporter: &config.ReporterConfig{
-			LogSpans: true,
-		},
-	}
-	tracer, closer, err := cfg.NewTracer(config.Logger(jaeger.StdLogger))
+// TODO: https://github.com/jaegertracing/jaeger-client-go/blob/master/config/example_test.go
+func Init() (opentracing.Tracer, io.Closer) {
+
+	cfg, err := config.FromEnv()
 	if err != nil {
-		panic(fmt.Sprintf("ERROR: cannot init Jaeger: %v\n", err))
+		// parsing errors might happen here, such as when we get a string where we expect a number
+		panic(fmt.Sprintf("Could not parse Jaeger env vars: %s", err.Error()))
 	}
+
+	tracer, closer, err := cfg.NewTracer()
+	if err != nil {
+		log.Printf("Could not initialize jaeger tracer: %s", err.Error())
+		panic(fmt.Sprintf("Could not initialize jaeger tracer: %s", err.Error()))
+	}
+
 	return tracer, closer
 }
