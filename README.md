@@ -2,7 +2,7 @@
 
 Contains MicroServices which send and receive cat names. The meow-client accepts requests via a REST API and uses GRPC to communicate with the meow-server.
 
-It is used in the Distributed Tracing tutorial <name>. Which goes over:
+It is used in the Distributed Tracing tutorial [Setting up Distributed Tracing in Kubernetes with OpenTelemetry, Jaeger, and Ingress-NGINX](https://awkwardferny.medium.com/setting-up-distributed-tracing-with-opentelemetry-jaeger-in-kubernetes-ingress-nginx-cfdda7d9441d), which goes over:
 
 - Ingress-Nginx Distributed Tracing
 - Instrumenting MicroServices
