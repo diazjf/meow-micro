@@ -16,4 +16,4 @@ build:
 
 .PHONY: install
 install:
-	helm install meow-micro helm
+	helm install -f helm/Values.yaml meow-micro ./helm
