@@ -1,7 +1,12 @@
 # Meow Micro 🐈
 
-Contains MicroServices which send and receive cat names. It is used
-in the Distributed Tracing tutorial found here:
+Contains MicroServices which send and receive cat names. The meow-client accepts requests via a REST API and uses GRPC to communicate with the meow-server.
+
+It is used in the Distributed Tracing tutorial <name>. Which goes over:
+
+- Ingress-Nginx Distributed Tracing
+- Instrumenting MicroServices
+- Viewing Trace
 
 ## Running Locally
 
@@ -32,33 +37,81 @@ There are some pre-requisites required before running the below:
 - Docker-Desktop
 - Helm v3
 
-1. Clean environment
+1. Install Ingress
 ```
-$ make clean
+$ kubectl 
 ```
 
-2. Build Docker Images
+2. Install Jaeger-All-In-One
+```
+$ kubectl apply -f jaeger/
+```
+
+3. Update Ingress Config-Map
+```
+```
+
+4. Build Docker Images
 ```
 $ make build
 ```
 
-3. Install via Helm Chart
+5. Install via Helm Chart
 ```
 $ make install
 ```
 
+## Testing Deployment Tracing
+
+1. Send a Request to the application
+```
+$ curl http://localhost/meow -X POST -d '{"name": "Meow-Mixer"}'
+```
+
+2. Verify GRPC communication via logs
+```
+$ kubectl logs
+
+$ kubectl logs
+```
+
+3. Open Jaeger UI
+```
+$ chrome http://localhost:8081
+```
+
+4. See the Traces
+
 ## Troubleshooting
 
-1. Exec into the meow-client pod
+1. Check items are correctly deployed
+```
+$ kubectl get all
 
-2. install grpcurl
+$ kubectl get all -n ingress-nginx
+```
+
+2. View the logs
+```
+$ kubectl logs
+
+$ kubectl logs
+
+$ kubectl logs
+```
+
+3. Exec into the meow-client pod
+```
+$ kubectl exec -it ....
+```
+
+4. install grpcurl
 ```
 go get github.com/fullstorydev/grpcurl/...
 go install github.com/fullstorydev/grpcurl/cmd/grpcurl
 ```
 
-3. Verify you can access the GRPC Service
-
+5. Verify you can access the GRPC Service
 ```
 grpcurl -d '{"body": "Meow-Mixer"}' -plaintext meow-server-svc:5001 chat.ChatService/SayHello
 
@@ -66,7 +119,3 @@ grpcurl -d '{"body": "Meow-Mixer"}' -plaintext meow-server-svc:5001 chat.ChatSer
   "body": "Meow-Mixer"
 }
 ```
-
-## Tracing
-
-Open Jaeger
