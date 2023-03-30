@@ -1,4 +1,4 @@
-FROM golang:1.16
+FROM golang:1.19.7
 
 WORKDIR /go/src/app
 COPY ../. /go/src/app
